@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar System Clock 2026</title>
+    <style>
+        /* CSS - Design and Motion */
+        :root {
+            --sun-color: radial-gradient(circle, #ffcc00 0%, #ff8800 100%);
+            --mercury-color: #A5A5A5;
+            --venus-color: #E3BB76;
+            --earth-color: #2271B3;
+            --mars-color: #E27B58;
+            --jupiter-color: #D39C7E;
+            --saturn-color: #C5AB6E;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            background: radial-gradient(circle at center, #0d1a2f 0%, #000 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+        }
+
+        /* Digital Clock Overlay */
+        .clock-container {
+            position: absolute;
+            top: 30px;
+            text-align: center;
+            z-index: 100;
+        }
+
+        #digital-clock {
+            font-size: 3rem;
+            font-weight: 200;
+            letter-spacing: 8px;
+            text-shadow: 0 0 20px rgba(0, 242, 255, 0.7);
+        }
+
+        #date-display {
+            font-size: 1rem;
+            opacity: 0.6;
+            letter-spacing: 2px;
+            margin-top: 5px;
+        }
+
+        /* Solar System Layout */
+        .solar-system {
+            position: relative;
+            width: 800px;
+            height: 800px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .sun {
+            width: 70px;
+            height: 70px;
+            background: var(--sun-color);
+            border-radius: 50%;
+            box-shadow: 0 0 60px #ff8800, inset 0 0 20px #ffff00;
+            z-index: 10;
+        }
+
+        /* Orbit Lines */
+        .orbit {
+            position: absolute;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .planet {
+            position: absolute;
+            top: 0;
+            border-radius: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* Animation Speeds (Scaled: Earth = 60s) */
+        .mercury-orbit { width: 120px; height: 120px; animation: orbit-rot 14.4s linear infinite; }
+        .venus-orbit   { width: 180px; height: 180px; animation: orbit-rot 36.6s linear infinite; }
+        .earth-orbit   { width: 260px; height: 260px; animation: orbit-rot 60s linear infinite; }
+        .mars-orbit    { width: 340px; height: 340px; animation: orbit-rot 112.8s linear infinite; }
+        .jupiter-orbit { width: 500px; height: 500px; animation: orbit-rot 711.6s linear infinite; }
+        .saturn-orbit  { width: 680px; height: 680px; animation: orbit-rot 1765s linear infinite; }
+
+        /* Planet Styles */
+        .mercury { width: 8px; height: 8px; background: var(--mercury-color); }
+        .venus   { width: 14px; height: 14px; background: var(--venus-color); }
+        .earth   { width: 16px; height: 16px; background: var(--earth-color); box-shadow: 0 0 10px var(--earth-color); }
+        .mars    { width: 12px; height: 12px; background: var(--mars-color); }
+        .jupiter { width: 34px; height: 34px; background: var(--jupiter-color); }
+        .saturn  { width: 28px; height: 28px; background: var(--saturn-color); }
+
+        @keyframes orbit-rot {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Background Stars */
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: twinkle var(--duration) infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="clock-container">
+        <div id="digital-clock">00:00:00</div>
+        <div id="date-display">JANUARY 03, 2026</div>
+    </div>
+
+    <div class="solar-system">
+        <div class="sun"></div>
+        
+        <div class="orbit mercury-orbit"><div class="planet mercury"></div></div>
+        <div class="orbit venus-orbit"><div class="planet venus"></div></div>
+        <div class="orbit earth-orbit"><div class="planet earth"></div></div>
+        <div class="orbit mars-orbit"><div class="planet mars"></div></div>
+        <div class="orbit jupiter-orbit"><div class="planet jupiter"></div></div>
+        <div class="orbit saturn-orbit"><div class="planet saturn"></div></div>
+    </div>
+
+    <script>
+        // JavaScript - Logic and Effects
+        
+        function updateClock() {
+            const now = new Date();
+            
+            // Format time
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            document.getElementById('digital-clock').textContent = `${hours}:${minutes}:${seconds}`;
+            
+            // Format date for 2026
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('date-display').textContent = now.toLocaleDateString('en-US', options).toUpperCase();
+        }
+
+        // Generate dynamic starfield
+        function createStars() {
+            const starCount = 300;
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                const size = Math.random() * 2 + 'px';
+                star.style.width = size;
+                star.style.height = size;
+                
+                star.style.top = Math.random() * 100 + 'vh';
+                star.style.left = Math.random() * 100 + 'vw';
+                
+                // Randomize twinkle speed
+                star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+                
+                document.body.appendChild(star);
+            }
+        }
+
+        // Initialize
+        createStars();
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>
